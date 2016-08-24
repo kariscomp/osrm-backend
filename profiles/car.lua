@@ -11,7 +11,7 @@ access_tag_blacklist = { ["no"] = true, ["private"] = true, ["agricultural"] = t
 access_tag_restricted = { ["destination"] = true, ["delivery"] = true }
 access_tags_hierarchy = { "motorcar", "motor_vehicle", "vehicle", "access" }
 service_tag_restricted = { ["parking_aisle"] = true }
-service_tag_forbidden = { ["emergency_access"] = true }
+service_tag_forbidden = { ["emergency"] = true }
 restriction_exception_tags = { "motorcar", "motor_vehicle", "vehicle" }
 
 -- A list of suffixes to suppress in name change instructions
