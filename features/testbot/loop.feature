@@ -99,27 +99,20 @@ Feature: Avoid weird loops caused by rounding errors
             | a,1,d     | ab,be,ef,ef,ef,cf,cd,cd |
 
     Scenario: Avoid loop crash on core
-        Given the contract extra arguments "--core 0.1"
+        Given the contract extra arguments "--core 0.8"
         Given the node map
-            |   | x |   |   |   |   |
-            |   | a | 1 | 2 | b | y |
-            |   | 8 |   |   | 3 |   |
-            |   | 7 |   |   | 4 |   |
-            | w | d | 6 | 5 | c |   |
-            |   |   |   |   | z |   |
+            |   | a |   | b |   |
+            |   | 1 |   |   |   |
+            |   |   | x |   |   |
+            |   | 2 |   |   |   |
+            |   | d |   | c |   |
 
         And the ways
-            | nodes  | oneyway | highway  |
-            | abcda  | yes     | primary  |
-            | zyxw   | yes     | tertiary |
-            | wd     | no      | primary  |
-            | xa     | no      | primary  |
-            | yb     | no      | primary  |
-            | zc     | no      | primary  |
+            | nodes  | oneyway | highway     | duration |
+            | abcda  | yes     | residential | 1200s    |
+            | axc    | no      | residential | 20s      |
+            | dxb    | no      | residential | 20s      |
 
         When I route I should get
-            | waypoints | route       |
-            | 2,1       | abcda,abcda |
-            | 4,3       | abcda,abcda |
-            | 6,5       | abcda,abcda |
-            | 8,7       | abcda,abcda |
+            | waypoints | time |
+            | 1,2       | 30s  |
