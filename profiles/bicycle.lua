@@ -402,6 +402,7 @@ end
 
 function turn_function (angle)
   -- compute turn penalty as angle^2, with a left/right bias
+  -- multiplying by 10 converts to deci-seconds see issue #1318
   k = 10*turn_penalty/(90.0*90.0)
   if angle>=0 then
     return angle*angle*k/turn_bias
