@@ -74,68 +74,69 @@ module.exports = function () {
 
                         if (headers.has('route')) {
                             got.route = (instructions || '').trim();
-
-                            if (headers.has('summary')) {
-                                got.summary = (summary || '').trim();
-                            }
-
-                            if (headers.has('alternative')) {
-                                // TODO examine more than first alternative?
-                                got.alternative ='';
-                                if (json.routes && json.routes.length > 1)
-                                    got.alternative = this.wayList(json.routes[1]);
-                            }
-
-                            var distance = hasRoute && json.routes[0].distance,
-                                time = hasRoute && json.routes[0].duration;
-
-                            if (headers.has('distance')) {
-                                if (row.distance.length) {
-                                    if (!row.distance.match(/\d+m/))
-                                        throw new Error('*** Distance must be specified in meters. (ex: 250m)');
-                                    got.distance = instructions ? util.format('%dm', distance) : '';
-                                } else {
-                                    got.distance = '';
-                                }
-                            }
-
-                            if (headers.has('time')) {
-                                if (!row.time.match(/\d+s/))
-                                    throw new Error('*** Time must be specied in seconds. (ex: 60s)');
-                                got.time = instructions ? util.format('%ds', time) : '';
-                            }
-
-                            if (headers.has('lanes')) {
-                                got.lanes = (lanes || '').trim();
-                            }
-
-                            if (headers.has('speed')) {
-                                if (row.speed !== '' && instructions) {
-                                    if (!row.speed.match(/\d+ km\/h/))
-                                        throw new Error('*** Speed must be specied in km/h. (ex: 50 km/h)');
-                                    var speed = time > 0 ? Math.round(3.6*distance/time) : null;
-                                    got.speed = util.format('%d km/h', speed);
-                                } else {
-                                    got.speed = '';
-                                }
-                            }
-
-                            if (headers.has('intersections')) {
-                                got.intersections = (intersections || '').trim();
-                            }
-
-                            var putValue = (key, value) => {
-                                if (headers.has(key)) got[key] = instructions ? value : '';
-                            };
-
-                            putValue('bearing', bearings);
-                            putValue('turns', turns);
-                            putValue('modes', modes);
-                            putValue('times', times);
-                            putValue('distances', distances);
-                            putValue('pronunciations', pronunciations);
-                            putValue('destinations', destinations);
                         }
+
+                        if (headers.has('summary')) {
+                            got.summary = (summary || '').trim();
+                        }
+
+                        if (headers.has('alternative')) {
+                            // TODO examine more than first alternative?
+                            got.alternative ='';
+                            if (json.routes && json.routes.length > 1)
+                                got.alternative = this.wayList(json.routes[1]);
+                        }
+
+                        var distance = hasRoute && json.routes[0].distance,
+                            time = hasRoute && json.routes[0].duration;
+
+                        if (headers.has('distance')) {
+                            if (row.distance.length) {
+                                if (!row.distance.match(/\d+m/))
+                                    throw new Error('*** Distance must be specified in meters. (ex: 250m)');
+                                got.distance = instructions ? util.format('%dm', distance) : '';
+                            } else {
+                                got.distance = '';
+                            }
+                        }
+
+                        if (headers.has('time')) {
+                            if (!row.time.match(/\d+s/))
+                                throw new Error('*** Time must be specied in seconds. (ex: 60s)');
+                            got.time = instructions ? util.format('%ds', time) : '';
+                            console.log(time);
+                        }
+
+                        if (headers.has('lanes')) {
+                            got.lanes = (lanes || '').trim();
+                        }
+
+                        if (headers.has('speed')) {
+                            if (row.speed !== '' && instructions) {
+                                if (!row.speed.match(/\d+ km\/h/))
+                                    throw new Error('*** Speed must be specied in km/h. (ex: 50 km/h)');
+                                var speed = time > 0 ? Math.round(3.6*distance/time) : null;
+                                got.speed = util.format('%d km/h', speed);
+                            } else {
+                                got.speed = '';
+                            }
+                        }
+
+                        if (headers.has('intersections')) {
+                            got.intersections = (intersections || '').trim();
+                        }
+
+                        var putValue = (key, value) => {
+                            if (headers.has(key)) got[key] = instructions ? value : '';
+                        };
+
+                        putValue('bearing', bearings);
+                        putValue('turns', turns);
+                        putValue('modes', modes);
+                        putValue('times', times);
+                        putValue('distances', distances);
+                        putValue('pronunciations', pronunciations);
+                        putValue('destinations', destinations);
 
                         var ok = true;
 
