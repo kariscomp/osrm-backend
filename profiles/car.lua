@@ -42,7 +42,7 @@ speed_profile = {
 -- service speeds
 service_speeds = {
   ["alley"] = 5,
-  ["parking_aisle"] = 5,
+  ["parking_aisle"] = 5
 }
 
 -- surface/trackype/smoothness
@@ -434,22 +434,12 @@ function way_function (way, result)
     end
 
     -- Set don't allow access to certain service roads
-    if  service_tag_forbidden[service] then
+    if service_tag_forbidden[service] then
       result.forward_mode = mode.inaccessible
       result.backward_mode = mode.inaccessible
       return
     end
   end
-
-  if service and service ~= "" then
-      if result.forward_mode ~= mode.inaccessible then
-        result.forward_speed = service_speeds[service]
-      end
-      if result.backward_mode ~= mode.inaccessible then
-        result.backward_speed = service_speeds[service]
-      end
-  end
-
 
   -- Set direction according to tags on way
   if obey_oneway then
@@ -530,7 +520,9 @@ function way_function (way, result)
   if result.forward_speed > 0 then
     local scaled_speed = result.forward_speed*speed_reduction + 11
     local penalized_speed = math.huge
-    if width <= 3 or (lanes <= 1 and is_bidirectional) then
+    if service and service ~= "" and service_speeds[service] then
+      penalized_speed = service_speeds[service]
+    elseif width <= 3 or (lanes <= 1 and is_bidirectional) then
       penalized_speed = result.forward_speed / 2
     end
     result.forward_speed = math.min(penalized_speed, scaled_speed)
@@ -539,7 +531,9 @@ function way_function (way, result)
   if result.backward_speed > 0 then
     local scaled_speed = result.backward_speed*speed_reduction + 11
     local penalized_speed = math.huge
-    if width <= 3 or (lanes <= 1 and is_bidirectional) then
+    if service and service ~= "" and service_speeds[service]then
+      penalized_speed = service_speeds[service]
+    elseif width <= 3 or (lanes <= 1 and is_bidirectional) then
       penalized_speed = result.backward_speed / 2
     end
     result.backward_speed = math.min(penalized_speed, scaled_speed)
